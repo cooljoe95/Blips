@@ -1,11 +1,14 @@
-const WIDTH_OF_PADDLE = 197;
+const WIDTH_OF_PADDLE = 200;
 const RADIUS_OF_BALL = 7;
 const MAX_NUM_OF_BALLS = 16;
-
+let LEVEL = 1;
+let score = 0;
 let stage;
 let waitingBalls = [];
 let ballsOnScreen = [];
 var nextRoundBalls = [];
+const text = new createjs.Text('Score: ', 'bold 36px Bungee Inline', '#000000');
+
 var paddle;
 
 class Paddle {
@@ -13,13 +16,13 @@ class Paddle {
 		document.addEventListener('keydown', (event) => {
 			switch (event.code) {
 			case 'ArrowLeft':
-				this.paddle.graphics.command.x = 3;
+				this.paddle.graphics.command.x = 0;
 				break;
 			case 'ArrowDown':
-				this.paddle.graphics.command.x = 202;
+				this.paddle.graphics.command.x = 200;
 				break;
 			case 'ArrowRight':
-				this.paddle.graphics.command.x = 401;
+				this.paddle.graphics.command.x = 400;
 				break;
 			}
 			stage.update();
@@ -27,7 +30,7 @@ class Paddle {
 	}
 
 	constructor () {
-		this.paddle = new createjs.Shape()
+		this.paddle = new createjs.Shape();
 		this.addPaddleListener();
 		this.paddle.graphics
 			.beginFill('#000000')
@@ -45,14 +48,16 @@ class Paddle {
 }
 
 class Ball {
-	constructor () {
-		this.endX = 190 * Math.random() + 5;
-		this.value = 1;
+	constructor (powerup) {
 		this.ball = new createjs.Shape();
-		this.dx = 1;
-		this.dy = 7;
+		if (powerup) {
+			this.powerup = true;
+		}
+		this.resetDXDY();
+		let colors = ['#1846bA', '#25A38E', '#18A318', '#996C0D', '#CE3700', '#FF0E0E', '#FF0ED3'];
+		let color = Math.floor(Math.random() * 7);
 		this.ball.graphics
-			.beginFill('#000000')
+			.beginFill(colors[color])
 			.drawCircle(0, 400, RADIUS_OF_BALL);
 	}
 
@@ -78,9 +83,12 @@ class Ball {
 	}
 
 	hitPaddle () {
-		this.score += this.value;
-		this.hit = true;
-		this.dy = -30;
+		score += Ball.value;
+		if (score % 10 === 0) {
+			LEVEL += 1;
+		}
+		this.dy = -(Math.round(Math.random() * 2) + 27);
+		this.dx = 4;
 	}
 
 	x () {
@@ -94,37 +102,36 @@ class Ball {
 	addToScreen () {
 		this.setX(0);
 		this.setY(150);
-		this.dx = 3;
-		this.dy = 15;
+		this.resetDXDY();
 		stage.addChild(this.ball);
-		this.hit = false;
 		ballsOnScreen.push(this);
 	}
 
 	removeBall () {
 		stage.removeChild(this.ball);
 		waitingBalls.push(this);
-		this.dx = 1;
-		this.hit = false;
-		this.dy = 7;
+	}
+
+	resetDXDY () {
+		this.dx = 3;
+		this.dy = -10;
 	}
 
 	lostBall () {
 		if (this.ball.graphics.command.y > 560 + RADIUS_OF_BALL) {
-			this.value = 1;
+			Ball.value = 1;
 			return true;
 		}
 		return false;
 	}
 	updateDY () {
-		if (this.hit) {
-			this.dy += 1;
-		}
+		this.dy += 1;
 	}
 
 	updatePos () {
 		this.increaseXBy(this.dx);
 		this.increaseYBy(this.dy);
+		text.text = `Score: ${score}`;
 		this.updateDY();
 	}
 
@@ -138,6 +145,8 @@ class Ball {
 		}
 	}
 }
+
+Ball.value = 1;
 
 const addBallToScreen = () => {
 	if (Math.random() < 0.05) {
@@ -164,7 +173,8 @@ const removeBalls = () => {
 };
 
 const tick = () => {
-	if (ballsOnScreen.length < 5) {
+	// addPowerUps();
+	if (ballsOnScreen.length < LEVEL) {
 		addBallToScreen();
 	}
 	removeBalls();
@@ -172,8 +182,7 @@ const tick = () => {
 };
 
 const addTicker = () => {
-	createjs.Ticker.setInterval(25);
-	createjs.Ticker.setFPS(60);
+	createjs.Ticker.setFPS(55);
 	createjs.Ticker.on('tick', tick);
 };
 
@@ -187,6 +196,10 @@ const init = () => {
 	stage = new createjs.Stage('root');
 	paddle = new Paddle();
 	createBalls();
+	text.x = 0;
+	text.y = 50;
+
+	stage.addChild(text);
 	addTicker();
 	stage.update();
 };
