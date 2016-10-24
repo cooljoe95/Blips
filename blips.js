@@ -3,11 +3,12 @@ const RADIUS_OF_BALL = 7;
 const MAX_NUM_OF_BALLS = 16;
 let LEVEL = 1;
 let score = 0;
+let longestChain = 0;
 let stage;
 let waitingBalls = [];
 let ballsOnScreen = [];
 var nextRoundBalls = [];
-const text = new createjs.Text('Score: ', 'bold 36px Bungee Inline', '#000000');
+const text = new createjs.Text('Score: 0\t\t\t\t\t\tLongest Chain: 0', 'bold 32px Bungee Inline', '#000000');
 
 var paddle;
 
@@ -33,8 +34,8 @@ class Paddle {
 		this.paddle = new createjs.Shape();
 		this.addPaddleListener();
 		this.paddle.graphics
-			.beginFill('#000000')
-			.drawRect(3, 550, WIDTH_OF_PADDLE, 3);
+			.beginFill('#0044b2')
+			.drawRect(3, 540, WIDTH_OF_PADDLE, -10);
 		stage.addChild(this.paddle);
 	}
 
@@ -83,8 +84,18 @@ class Ball {
 	}
 
 	hitPaddle () {
+
 		score += Ball.value;
-		if (score % 10 === 0) {
+		if(score > longestChain){
+			longestChain = score;
+		}
+		if (score % 20 === 0) {
+			if(LEVEL > 4 && (LEVEL % 3 === 1 || LEVEL % 3 === 2)) {
+				LEVEL -= 1;
+			}
+			if(LEVEL % 4 === 0) {
+				LEVEL -= 2;
+			}
 			LEVEL += 1;
 		}
 		this.dy = -(Math.round(Math.random() * 2) + 27);
@@ -119,6 +130,10 @@ class Ball {
 
 	lostBall () {
 		if (this.ball.graphics.command.y > 560 + RADIUS_OF_BALL) {
+			score = 0;
+			if(LEVEL >= 4){
+				LEVEL -= 2;
+			}
 			Ball.value = 1;
 			return true;
 		}
@@ -131,13 +146,13 @@ class Ball {
 	updatePos () {
 		this.increaseXBy(this.dx);
 		this.increaseYBy(this.dy);
-		text.text = `Score: ${score}`;
+		text.text = `Score: ${score}\t\t\t\t\t\tLongest Chain: ${longestChain}`;
 		this.updateDY();
 	}
 
 	run () {
 		this.updatePos();
-		if ((this.y() + RADIUS_OF_BALL) >= paddle.y() && !this.lostBall()) {
+		if ((this.y()) >= (paddle.y() - 20) && !this.lostBall()) {
 			const offSet = paddle.x() + WIDTH_OF_PADDLE - this.x();
 			if (offSet >= 0 && offSet <= WIDTH_OF_PADDLE) {
 				this.hitPaddle();
@@ -197,8 +212,7 @@ const init = () => {
 	paddle = new Paddle();
 	createBalls();
 	text.x = 0;
-	text.y = 50;
-
+	text.y = 20;
 	stage.addChild(text);
 	addTicker();
 	stage.update();

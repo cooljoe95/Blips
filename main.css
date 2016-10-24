@@ -1,0 +1,12 @@
+body {
+	background-color: cornsilk;
+}
+
+canvas {
+	display: block;
+    margin: auto;
+    margin-top: 50px;
+    padding: 15px 40px;
+    background-color: darksalmon;
+    border-radius: 15px;
+}
