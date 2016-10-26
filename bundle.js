@@ -54,7 +54,7 @@
 	let waitingBalls = [];
 	let ballsOnScreen = [];
 	var nextRoundBalls = [];
-	const text = new createjs.Text('Score: 0\t\t\t\t\t\tLongest Chain: 0', 'bold 32px Bungee Inline', '#000000');
+	let text;
 	
 	var paddle;
 	
@@ -130,16 +130,17 @@
 		}
 	
 		hitPaddle () {
-	
 			score += Ball.value;
-			if(score > longestChain){
+			if (score > longestChain) {
 				longestChain = score;
+				localStorage.setItem('highScore', score);
 			}
+	
 			if (score % 20 === 0) {
-				if(LEVEL > 4 && (LEVEL % 3 === 1 || LEVEL % 3 === 2)) {
+				if (LEVEL > 4 && (LEVEL % 3 === 1 || LEVEL % 3 === 2)) {
 					LEVEL -= 1;
 				}
-				if(LEVEL % 4 === 0) {
+				if (LEVEL % 4 === 0) {
 					LEVEL -= 2;
 				}
 				LEVEL += 1;
@@ -177,7 +178,7 @@
 		lostBall () {
 			if (this.ball.graphics.command.y > 560 + RADIUS_OF_BALL) {
 				score = 0;
-				if(LEVEL >= 4){
+				if (LEVEL >= 4) {
 					LEVEL -= 2;
 				}
 				Ball.value = 1;
@@ -265,6 +266,13 @@
 	};
 	
 	document.addEventListener('DOMContentLoaded', () => {
+		if (localStorage.highScore) {
+			longestChain = localStorage.highScore;
+		} else {
+			localStorage.setItem('highScore', '0');
+		}
+		text = new createjs.Text(`Score: 0\t\t\t\t\t\tLongest Chain: ${longestChain}`, 'bold 32px Bungee Inline', '#000000');
+	
 		init();
 	});
 
