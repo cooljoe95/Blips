@@ -10,3 +10,74 @@ canvas {
     background-color: darksalmon;
     border-radius: 15px;
 }
+
+/* bungee-inline-regular - latin_latin-ext */
+@font-face {
+  font-family: 'Bungee Inline';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/bungee-inline-v2-latin_latin-regular.eot'); /* IE9 Compat Modes */
+  src: local('Bungee Inline'), local('BungeeInline-Regular'),
+       url('./fonts/bungee-inline-v2-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./fonts/bungee-inline-v2-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('./fonts/bungee-inline-v2-latin-regular.woff') format('woff'), /* Modern Browsers */
+       url('./fonts/bungee-inline-v2-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('./fonts/bungee-inline-v2-latin-regular.svg#BungeeInline') format('svg'); /* Legacy iOS */
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+		position: relative;
+    background-color: cornsilk;
+    margin: 150px auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 250px;
+		height: 350px;
+		border: 3px solid blue;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#play-btn:hover{
+	background-color: green;
+}
+#play-btn{
+	position: absolute;
+	bottom: 50px;
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%);
+	color: black;
+	padding: 10px 15px;
+	text-decoration: none;
+	border: 1px solid red;
+
+}

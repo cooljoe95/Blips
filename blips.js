@@ -1,9 +1,11 @@
 const WIDTH_OF_PADDLE = 200;
 const RADIUS_OF_BALL = 7;
 const MAX_NUM_OF_BALLS = 16;
-let LEVEL = 1;
+let LEVEL = 2;
 let score = 0;
+let numHits = 0;
 let longestChain = 0;
+let inplay = false;
 let stage;
 let waitingBalls = [];
 let ballsOnScreen = [];
@@ -85,18 +87,20 @@ class Ball {
 
 	hitPaddle () {
 		score += Ball.value;
+		numHits += 1;
 		if (score > longestChain) {
 			longestChain = score;
 			localStorage.setItem('highScore', score);
 		}
 
-		if (score % 20 === 0) {
+		if (numHits % 20 === 0) {
 			if (LEVEL > 4 && (LEVEL % 3 === 1 || LEVEL % 3 === 2)) {
 				LEVEL -= 1;
 			}
 			if (LEVEL % 4 === 0) {
-				LEVEL -= 2;
+				LEVEL -= 1;
 			}
+			Ball.value *= 2;
 			LEVEL += 1;
 		}
 		this.dy = -(Math.round(Math.random() * 2) + 27);
@@ -131,11 +135,8 @@ class Ball {
 
 	lostBall () {
 		if (this.ball.graphics.command.y > 560 + RADIUS_OF_BALL) {
-			score = 0;
-			if (LEVEL >= 4) {
-				LEVEL -= 2;
-			}
-			Ball.value = 1;
+			inplay = false;
+			makeModal();
 			return true;
 		}
 		return false;
@@ -147,7 +148,7 @@ class Ball {
 	updatePos () {
 		this.increaseXBy(this.dx);
 		this.increaseYBy(this.dy);
-		text.text = `Score: ${score}\t\t\t\t\t\tLongest Chain: ${longestChain}`;
+		text.text = `Score: ${score}\t\t\t\t\t\tHigh Score: ${longestChain}`;
 		this.updateDY();
 	}
 
@@ -190,8 +191,10 @@ const removeBalls = () => {
 
 const tick = () => {
 	// addPowerUps();
-	if (ballsOnScreen.length < LEVEL) {
-		addBallToScreen();
+	if (inplay) {
+		if (ballsOnScreen.length < LEVEL) {
+			addBallToScreen();
+		}
 	}
 	removeBalls();
 	stage.update();
@@ -209,23 +212,45 @@ const createBalls = () => {
 };
 
 const init = () => {
+	createBalls();
+	addTicker();
+	stage.update();
+};
+
+const makeModal = (innerText) => {
+	// Get the modal
+	var modal = document.getElementById('myModal');
+	setTimeout(function () { stage.update(); }, 0);
+
+	modal.style.display = 'block';
+	var text = document.getElementsByClassName('text-in-modal')[0];
+	text.innerHTML = innerText;
+	var playGame = document.getElementById('play-btn');
+	playGame.onclick = function () {
+		score = 0;
+		LEVEL = 2;
+		Ball.value = 1;
+		modal.style.display = 'none';
+		inplay = true;
+	};
+	stage.update();
+};
+
+const setup = function () {
+	text = new createjs.Text(`Score: 0\t\t\t\t\t\tHigh Score: ${longestChain}`, 'bold 32px Bungee Inline', '#000000');
 	stage = new createjs.Stage('root');
 	paddle = new Paddle();
-	createBalls();
 	text.x = 0;
 	text.y = 20;
 	stage.addChild(text);
-	addTicker();
 	stage.update();
+	init();
+	makeModal();
 };
 
 document.addEventListener('DOMContentLoaded', () => {
 	if (localStorage.highScore) {
 		longestChain = localStorage.highScore;
-	} else {
-		localStorage.setItem('highScore', '0');
 	}
-	text = new createjs.Text(`Score: 0\t\t\t\t\t\tLongest Chain: ${longestChain}`, 'bold 32px Bungee Inline', '#000000');
-
-	init();
+	setup();
 });

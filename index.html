@@ -3,11 +3,22 @@
 	<head>
 		<meta charset="utf-8">
 		<script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
-		<link href="https://fonts.googleapis.com/css?family=Bungee+Inline" rel="stylesheet">
-		<link rel="stylesheet" type="text/css" href="main.css">
+		<!-- <link href="https://fonts.googleapis.com/css?family=Bungee+Inline" rel="stylesheet"> -->
+		<link id="css-sheet" rel="stylesheet" type="text/css" href="main.css">
 		<script type="text/javascript" src='bundle.js'></script>
 	</head>
 	<body id='body'>
 		<canvas id="root" width="600" height="600"></canvas>
+
+		<!-- The Modal -->
+		<div id="myModal" class="modal">
+
+			<!-- Modal content -->
+			<div class="modal-content">
+				<p class='text-in-modal'>Instructions...</p>
+				<a id="play-btn" href="#" />Play Game</a>
+			</div>
+
+		</div>
 	</body>
 </html>
