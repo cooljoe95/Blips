@@ -97,11 +97,9 @@
 	}
 	
 	class Ball {
+	
 		constructor (powerup) {
 			this.ball = new createjs.Shape();
-			if (powerup) {
-				this.powerup = true;
-			}
 			this.resetDXDY();
 			let colors = ['#1846bA', '#25A38E', '#18A318', '#996C0D', '#CE3700', '#FF0E0E', '#FF0ED3'];
 			let color = Math.floor(Math.random() * 7);
@@ -179,14 +177,24 @@
 			this.dy = -10;
 		}
 	
+		instructions () {
+			return `<p>Not so simple, eh?</p>
+							<p>I guess you need more guidance.</p>
+							<p>The only keys that count are <span>⬅</span><span>⬇</span><span>&#x27A1;</span></p>
+							<p>Middle paddle appears when the down button is pressed.</p>
+							`;
+		}
+	
 		lostBall () {
 			if (this.ball.graphics.command.y > 560 + RADIUS_OF_BALL) {
 				inplay = false;
-				makeModal();
+				ballsOnScreen.forEach((ball) => (ball.setY(650)));
+				score < 8 ? makeModal(this.instructions()) : makeModal('Play again?');
 				return true;
 			}
 			return false;
 		}
+	
 		updateDY () {
 			this.dy += 1;
 		}
@@ -263,21 +271,42 @@
 		stage.update();
 	};
 	
-	const makeModal = (innerText) => {
-		// Get the modal
-		var modal = document.getElementById('myModal');
-		setTimeout(function () { stage.update(); }, 0);
+	const defaultText = () => {
+		return `Welcome to Blips
+									<br />
+									<br />
+									Get the balls from the start to the end.
+									<br />
+									<br />
+									Sounds simple? Give it a try.`;
+	};
 	
+	const updateModal = (innerText) => {
+		var modal = document.getElementById('myModal');
 		modal.style.display = 'block';
 		var text = document.getElementsByClassName('text-in-modal')[0];
 		text.innerHTML = innerText;
+		return modal;
+	};
+	
+	const makeModal = (innerText) => {
+		// Get the modal
+		if (!innerText) {
+			innerText = defaultText();
+		}
+		setTimeout(function () { stage.update(); }, 0);
+		var modal = updateModal(innerText);
+	
 		var playGame = document.getElementById('play-btn');
 		playGame.onclick = function () {
-			score = 0;
 			LEVEL = 2;
+			score = 0;
+			numHits = 0;
+			text.text = `Score: ${score}\t\t\t\t\t\tHigh Score: ${longestChain}`;
 			Ball.value = 1;
 			modal.style.display = 'none';
 			inplay = true;
+			stage.update();
 		};
 		stage.update();
 	};

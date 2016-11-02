@@ -78,6 +78,23 @@ canvas {
 	color: black;
 	padding: 10px 15px;
 	text-decoration: none;
-	border: 1px solid red;
+	border: 4px solid red;
+	font-family: 'Bungee Inline';
 
+}
+
+.text-in-modal span{
+	padding: 2px 3px;
+	background-color: white;
+	margin: 0 3px;
+	border: 2px solid black;
+}
+
+.text-in-modal {
+	font-family: 'Bungee Inline';
+	font-size: 14px;
+}
+.text-in-modal > a{
+	font-family: 'Bungee Inline';
+	font-size: 14px;
 }
