@@ -5,7 +5,7 @@ body {
 canvas {
 	display: block;
     margin: auto;
-    margin-top: 50px;
+    margin-top: 10px;
     padding: 15px 40px;
     background-color: darksalmon;
     border-radius: 15px;
@@ -33,7 +33,7 @@ canvas {
     left: 0;
     top: 0;
     width: 100%; /* Full width */
-    height: 100%; /* Full height */
+    height: 87%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
@@ -83,6 +83,19 @@ canvas {
 
 }
 
+header {
+	font-family: 'Bungee Inline';
+	font-size: 42px;
+	color: rgb(13, 140, 143);
+	display: block;
+	margin: auto;
+}
+
+header div {
+	margin: auto;
+	text-align: center;
+}
+
 .text-in-modal span{
 	padding: 2px 3px;
 	background-color: white;
@@ -97,4 +110,20 @@ canvas {
 .text-in-modal > a{
 	font-family: 'Bungee Inline';
 	font-size: 14px;
+}
+
+footer {
+	display: block;
+	text-align: center;
+	margin: auto;
+}
+a{text-decoration:none;}
+
+footer a {
+	padding-right: 20px;
+	padding-top: 15px;
+}
+
+img {
+	padding-top: 35px;
 }
