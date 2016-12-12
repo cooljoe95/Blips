@@ -5,4 +5,17 @@
 Click Play and you will be using the left, down, and right arrows to move the paddle. The down button (for the middle paddle) is different for most gamers expecting a smooth left and right transitions. The goal is to ensure that no ball goes past the paddle line, otherwise you lose. The number of balls will increase and the game will get harder.
 
 ## Screenshots
-![link](./blips.png)
+![link](images/blips.png)
+
+## Code
+```javascript
+run () {
+	this.updatePos();
+	if ((this.y()) >= (paddle.y() - 20) && !this.lostBall()) {
+		const offSet = paddle.x() + WIDTH_OF_PADDLE - this.x();
+		if (offSet >= 0 && offSet <= WIDTH_OF_PADDLE) {
+			this.hitPaddle();
+		}
+	}
+}
+```
