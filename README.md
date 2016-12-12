@@ -19,9 +19,8 @@ run () {
 	}
 }
 ```
-```
+
 This snippet is the code that checks to see if the ball has hit the paddle after updating the position.
-```
 
 ```javascript
 updatePos () {
@@ -31,6 +30,5 @@ updatePos () {
 	this.updateDY();
 }
 ```
-```
+
 This is the soul of the graphics simulator. I remembered some of my high school physics that that required I add to my velocity to create acceleration. And an acceleration towards the bottom of the screen gave the impression of gravity.
-```
